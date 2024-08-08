@@ -16,11 +16,11 @@ ESSENTIAL_PACKAGES="networkmanager base-devel linux-headers grub efibootmgr dosf
 timedatectl set-ntp true
 
 # Partition the disks
-parted $DISK -- mklabel gpt
-parted $DISK -- mkpart primary fat32 1MiB 512MiB
-parted $DISK -- set 1 esp on
-parted $DISK -- mkpart primary linux-swap 512MiB 2.5GiB
-parted $DISK -- mkpart primary ext4 2.5GiB 100%
+parted ${DISK} -- mklabel gpt
+parted ${DISK} -- mkpart primary fat32 1MiB 512MiB
+parted ${DISK} -- set 1 esp on
+parted ${DISK} -- mkpart primary linux-swap 512MiB 2.5GiB
+parted ${DISK} -- mkpart primary ext4 2.5GiB 100%
 
 # Format the partitions
 mkfs.fat -F32 ${DISK}1
@@ -52,23 +52,23 @@ locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Network configuration
-echo "$HOSTNAME" > /etc/hostname
+echo "${HOSTNAME}" > /etc/hostname
 cat <<EOL > /etc/hosts
 127.0.0.1    localhost
 ::1          localhost
-127.0.1.1    $HOSTNAME.localdomain $HOSTNAME
+127.0.1.1    ${HOSTNAME}.localdomain ${HOSTNAME}
 EOL
 
 # Install essential packages
-pacman -S --noconfirm $ESSENTIAL_PACKAGES $DISPLAY_MANAGER $PACKAGES $GUI_PACKAGES
+pacman -S --noconfirm ${ESSENTIAL_PACKAGES} ${DISPLAY_MANAGER} ${PACKAGES} ${GUI_PACKAGES}
 
 # Enable NetworkManager
 systemctl enable NetworkManager
 
 # Create user
-useradd -m -G wheel -s /bin/bash $USERNAME
-echo "$USERNAME:$PASSWORD" | chpasswd
-echo "root:$PASSWORD" | chpasswd
+useradd -m -G wheel -s /bin/bash ${USERNAME}
+echo "${USERNAME}:${PASSWORD}" | chpasswd
+echo "root:${PASSWORD}" | chpasswd
 
 # Configure sudo
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
