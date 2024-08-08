@@ -6,8 +6,11 @@ HOSTNAME="archlinux"    # set hostname here
 USERNAME="user"         # make sure to set your username here
 PASSWORD="password"     # you can change the password later
 SWAP_SIZE="2G"
-GUI_PACKAGES="networkmanager neovim sway swaybg swayidle swaylock xorg-server xorg-xwayland wayland-utils xorg-xinit xterm alacritty zathura zathura-pdf-mupdf"
-ESSENTIAL_PACKAGES="base-devel linux-headers grub efibootmgr dosfstools os-prober mtools"
+DISPLAY_MANAGER="ly"
+PACKAGES="neovim alacritty zathura zathura-pdf-mupdf"
+GUI_PACKAGES="sway swaybg swayidle swaylock xorg-server xorg-xwayland wayland-utils xorg-xinit xterm"
+# ESSENTIAL_PACKAGES are not the base packages. There's no variable for base packages.
+ESSENTIAL_PACKAGES="networkmanager base-devel linux-headers grub efibootmgr dosfstools os-prober mtools mesa"
 
 # Update the system clock
 timedatectl set-ntp true
@@ -57,10 +60,7 @@ cat <<EOL > /etc/hosts
 EOL
 
 # Install essential packages
-pacman -S --noconfirm $ESSENTIAL_PACKAGES
-
-# Install GUI packages
-pacman -S --noconfirm $GUI_PACKAGES
+pacman -S --noconfirm $ESSENTIAL_PACKAGES $DISPLAY_MANAGER $PACKAGES $GUI_PACKAGES
 
 # Enable NetworkManager
 systemctl enable NetworkManager
